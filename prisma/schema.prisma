@@ -12,9 +12,9 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model Car {
   id        String    @id @default(uuid())
+  userId    String
   model     String
   brand     String
   year      Int
@@ -22,6 +22,8 @@ model Car {
   condition Condition
   price     Float
   fuel      FuelType
+  gearbox   Gearbox
+  about     String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -38,4 +40,9 @@ enum FuelType {
 enum Condition {
   NEW
   USED
+}
+
+enum Gearbox {
+  MANUAL
+  AUTOMATIC
 }
