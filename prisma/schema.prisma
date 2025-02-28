@@ -18,6 +18,7 @@ model Seller {
   email       String        @unique
   adress      String
   phoneNumber String
+  about       String
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   cars        Car[]
@@ -28,7 +29,6 @@ model Buyer {
   id          String   @id @default(uuid())
   email       String   @unique
   phoneNumber String
-  about       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
