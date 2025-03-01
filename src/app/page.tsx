@@ -33,18 +33,18 @@ export default function Home() {
                                     <li className="flex items-center gap-2">
                                         <Button
                                             variant="ghost"
-                                            className="flex h-7 items-center gap-2 p-0 text-base"
+                                            className="h-7 items-center gap-2 p-0 text-base"
                                         >
-                                            <Car className="!h-6 !w-6" />
+                                            <Car size={25} />
                                             <span>Cars</span>
                                         </Button>
                                     </li>
                                     <li className="flex items-center gap-2">
                                         <Button
                                             variant="ghost"
-                                            className="flex h-7 items-center gap-2 p-0 text-base"
+                                            className="h-7 items-center gap-2 p-0 text-base"
                                         >
-                                            <Bike className="!h-6 !w-6" />
+                                            <Bike size={25} />
                                             <span>Motorcycles</span>
                                         </Button>
                                     </li>
