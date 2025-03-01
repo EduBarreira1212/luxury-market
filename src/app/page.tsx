@@ -1,5 +1,4 @@
-import { MenuIcon } from 'lucide-react';
-import Image from 'next/image';
+import { MenuIcon, Car, Bike } from 'lucide-react';
 import {
     Sheet,
     SheetTrigger,
@@ -21,15 +20,43 @@ export default function Home() {
                                 <MenuIcon />
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side={'left'}>
+                        <SheetContent side="left" className="w-60">
                             <SheetHeader>
-                                <SheetTitle>Are you absolutely sure?</SheetTitle>
+                                <SheetTitle>Welcome!</SheetTitle>
                                 <SheetDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete your account and remove your
-                                    data from our servers.
+                                    Click on an option to see more
                                 </SheetDescription>
                             </SheetHeader>
+
+                            <div className="mt-3 border-t border-black pt-3">
+                                <ul>
+                                    <li className="flex items-center gap-2">
+                                        <Button
+                                            variant="ghost"
+                                            className="flex h-7 items-center gap-2 p-0 text-base"
+                                        >
+                                            <Car className="!h-6 !w-6" />
+                                            <span>Cars</span>
+                                        </Button>
+                                    </li>
+                                    <li className="flex items-center gap-2">
+                                        <Button
+                                            variant="ghost"
+                                            className="flex h-7 items-center gap-2 p-0 text-base"
+                                        >
+                                            <Bike className="!h-6 !w-6" />
+                                            <span>Motorcycles</span>
+                                        </Button>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div className="mt-3 border-t border-black pt-3">
+                                <ul>
+                                    <li>About</li>
+                                    <li>Contact</li>
+                                </ul>
+                            </div>
                         </SheetContent>
                     </Sheet>
                     <span>Luxury Market</span>
