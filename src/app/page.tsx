@@ -2,6 +2,7 @@ import NavbarPortal from './_components/navbar-portal';
 import { Button } from './_components/ui/button';
 import { User2 } from 'lucide-react';
 import CategoryCard from './_components/category-card';
+import Link from 'next/link';
 
 export default function Home() {
     return (
@@ -32,8 +33,12 @@ export default function Home() {
                         </div>
                         <div className="flex w-full border-y border-white py-2">
                             <ul className="flex flex-row gap-4 px-5 text-white">
-                                <li>Cars</li>
-                                <li>Motorcycles</li>
+                                <li>
+                                    <Link href="/cars">Cars</Link>
+                                </li>
+                                <li>
+                                    <Link href="/motorcycles">Motorcycles</Link>
+                                </li>
                             </ul>
                         </div>
                     </div>
