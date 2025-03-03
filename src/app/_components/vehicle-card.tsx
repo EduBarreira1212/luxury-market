@@ -8,10 +8,10 @@ type CarCardProps = {
     car: Car;
 };
 
-const CarCard = ({ car }: CarCardProps) => {
+const VehicleCard = ({ car }: CarCardProps) => {
     return (
         <Link href="#">
-            <Card className="flex h-80 w-80 flex-col rounded-sm">
+            <Card className="flex h-80 w-96 flex-col rounded-sm">
                 <CardContent className="relative h-full p-0">
                     <Image
                         src="/images/fallback.png"
@@ -35,4 +35,4 @@ const CarCard = ({ car }: CarCardProps) => {
     );
 };
 
-export default CarCard;
+export default VehicleCard;
