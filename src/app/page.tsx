@@ -53,7 +53,7 @@ export default function Home() {
             <div className="my-3 flex w-full flex-col items-center px-5">
                 <div className="flex w-full flex-col items-center gap-2">
                     <h2 className="text-3xl">Categories</h2>
-                    <div className="flex gap-3">
+                    <div className="flex w-full flex-wrap justify-center gap-3">
                         <CategoryCard
                             href="/cars"
                             src="/images/car-category.jpg"
