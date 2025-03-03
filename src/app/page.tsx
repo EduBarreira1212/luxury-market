@@ -3,12 +3,15 @@ import { Button } from './_components/ui/button';
 import { User2 } from 'lucide-react';
 import CategoryCard from './_components/category-card';
 import Link from 'next/link';
+import ImagesCarousel from './_components/images-carousel';
 
 export default function Home() {
     return (
         <>
-            <div className="h-[85vh] w-full bg-black">
-                <div className="flex h-full flex-col justify-between gap-4 py-3">
+            <div className="relative h-[85vh] w-full">
+                <ImagesCarousel />
+                <div className="absolute inset-0 z-10 bg-black bg-opacity-30"></div>
+                <div className="absolute inset-0 z-20 flex h-full flex-col justify-between gap-4 py-3">
                     <div className="flex flex-col gap-3">
                         <div className="flex w-full flex-row justify-between px-5">
                             <div className="flex items-center gap-3">
@@ -42,12 +45,12 @@ export default function Home() {
                             </ul>
                         </div>
                     </div>
-                    <h1 className="w-30 px-5 text-2xl text-white">
+                    <h1 className="w-30 px-5 text-3xl text-white">
                         The best marketplace to buy luxury
                     </h1>
                 </div>
             </div>
-            <div className="mt-3 flex w-full flex-col items-center px-5">
+            <div className="my-3 flex w-full flex-col items-center px-5">
                 <div className="flex w-full flex-col items-center gap-2">
                     <h2 className="text-3xl">Categories</h2>
                     <div className="flex gap-3">
@@ -66,7 +69,6 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <footer></footer>
         </>
     );
 }
