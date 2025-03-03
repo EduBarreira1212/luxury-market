@@ -4,6 +4,7 @@ import NavbarPortal from '../_components/navbar-portal';
 import { Button } from '../_components/ui/button';
 import { Input } from '../_components/ui/input';
 import { getCars } from '../_data-access/car/get-cars';
+import CarCard from '../_components/car-card';
 
 const CarsPage = async () => {
     const cars = await getCars();
@@ -53,15 +54,13 @@ const CarsPage = async () => {
                     <h1 className="w-30 px-5 text-3xl text-white">Luxury cars</h1>
                 </div>
             </div>
-            <div className="my-3 flex h-[85vh] w-full flex-col items-center">
+            <div className="my-3 flex min-h-[85vh] w-full flex-col items-center gap-3 p-5">
                 <h2 className="text-3xl">All available</h2>
-                {cars.map((car) => {
-                    return (
-                        <span key={car.id}>
-                            {car.model} {car.brand}
-                        </span>
-                    );
-                })}
+                <div className="flex w-full flex-wrap items-center justify-center gap-4">
+                    {cars.map((car) => {
+                        return <CarCard key={car.id} car={car} />;
+                    })}
+                </div>
             </div>
         </>
     );
