@@ -1,23 +1,29 @@
-import NavbarPortal from './_components/navbar-portal';
-import { Button } from './_components/ui/button';
 import { User2 } from 'lucide-react';
-import CategoryCard from './_components/category-card';
 import Link from 'next/link';
-import ImagesCarousel from './_components/images-carousel';
+import NavbarPortal from '../_components/navbar-portal';
+import { Button } from '../_components/ui/button';
+import { Input } from '../_components/ui/input';
+import { getCars } from '../_data-access/car/get-cars';
+import VehicleCard from '../_components/vehicle-card';
 
-export default function Home() {
+const CarsPage = async () => {
+    const cars = await getCars();
+
     return (
         <>
-            <div className="relative h-[85vh] w-full">
-                <ImagesCarousel />
-                <div className="absolute inset-0 z-10 bg-black bg-opacity-30"></div>
-                <div className="absolute inset-0 z-20 flex h-full flex-col justify-between gap-4 py-3">
+            <div className="relative h-[85vh] w-full bg-[url('/images/lambo.jpg')] bg-cover bg-center">
+                <div className="absolute inset-0 bg-black bg-opacity-35"></div>
+                <div className="relative flex h-full flex-col justify-between gap-4 py-3">
                     <div className="flex flex-col gap-3">
-                        <div className="flex w-full flex-row justify-between px-5">
+                        <div className="flex w-full flex-row items-center justify-between px-5">
                             <div className="flex items-center gap-3">
                                 <NavbarPortal />
                                 <h1 className="text-xl text-white">Luxury Market</h1>
                             </div>
+                            <Input
+                                className="w-[35%] rounded-2xl"
+                                placeholder="Search cars"
+                            />
                             <div className="flex items-center gap-2">
                                 <Button
                                     variant="link"
@@ -45,30 +51,19 @@ export default function Home() {
                             </ul>
                         </div>
                     </div>
-                    <h1 className="w-30 px-5 text-3xl text-white">
-                        The best marketplace to buy luxury
-                    </h1>
+                    <h1 className="w-30 px-5 text-3xl text-white">Luxury cars</h1>
                 </div>
             </div>
-            <div className="my-3 flex w-full flex-col items-center px-5">
-                <div className="flex w-full flex-col items-center gap-2">
-                    <h2 className="text-3xl">Categories</h2>
-                    <div className="flex w-full flex-wrap justify-center gap-3">
-                        <CategoryCard
-                            href="/cars"
-                            src="/images/car-category.jpg"
-                            alt="car category"
-                            title="Cars"
-                        />
-                        <CategoryCard
-                            href="/motorcycles"
-                            src="/images/motorcycle-category.jpg"
-                            alt="motorcycle category"
-                            title="Motorcycles"
-                        />
-                    </div>
+            <div className="my-3 flex min-h-[85vh] w-full flex-col items-center gap-3 p-5">
+                <h2 className="text-3xl">All available</h2>
+                <div className="flex w-full flex-wrap items-center justify-center gap-4">
+                    {cars.map((car) => {
+                        return <VehicleCard key={car.id} car={car} />;
+                    })}
                 </div>
             </div>
         </>
     );
-}
+};
+
+export default CarsPage;
