@@ -1,14 +1,14 @@
-import { Car } from '@prisma/client';
+import { Car, Motorcycle } from '@prisma/client';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent, CardFooter } from './ui/card';
 import { formatCurrency } from '../_helpers/currency';
 
-type CarCardProps = {
-    car: Car;
+type VehicleCardProps = {
+    vehicle: Car | Motorcycle;
 };
 
-const VehicleCard = ({ car }: CarCardProps) => {
+const VehicleCard = ({ vehicle }: VehicleCardProps) => {
     return (
         <Link href="#">
             <Card className="flex h-80 w-96 flex-col rounded-sm">
@@ -24,9 +24,9 @@ const VehicleCard = ({ car }: CarCardProps) => {
                     <div>
                         <div className="flex flex-col gap-2">
                             <span>
-                                {car.year} {car.model} {car.brand}
+                                {vehicle.year} {vehicle.model} {vehicle.brand}
                             </span>
-                            <span>{formatCurrency(car.price)}</span>
+                            <span>{formatCurrency(vehicle.price)}</span>
                         </div>
                     </div>
                 </CardFooter>
