@@ -1,9 +1,8 @@
 import NavbarPortal from './_components/navbar-portal';
-import { Button } from './_components/ui/button';
-import { User2 } from 'lucide-react';
 import CategoryCard from './_components/category-card';
 import Link from 'next/link';
 import ImagesCarousel from './_components/images-carousel';
+import HeaderRight from './_components/header-right';
 
 export default function Home() {
     return (
@@ -18,21 +17,7 @@ export default function Home() {
                                 <NavbarPortal />
                                 <h1 className="text-xl text-white">Luxury Market</h1>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    variant="link"
-                                    className="text-base text-white"
-                                >
-                                    Sell with us
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    className="items-center rounded-xl text-base"
-                                >
-                                    <User2 size={18} />
-                                    Log in
-                                </Button>
-                            </div>
+                            <HeaderRight />
                         </div>
                         <div className="flex w-full border-y border-white py-2">
                             <ul className="flex flex-row gap-4 px-5 text-white">

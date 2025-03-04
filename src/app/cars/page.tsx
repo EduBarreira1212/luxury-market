@@ -1,10 +1,9 @@
-import { User2 } from 'lucide-react';
 import Link from 'next/link';
 import NavbarPortal from '../_components/navbar-portal';
-import { Button } from '../_components/ui/button';
 import { Input } from '../_components/ui/input';
 import { getCars } from '../_data-access/car/get-cars';
 import VehicleCard from '../_components/vehicle-card';
+import HeaderRight from '../_components/header-right';
 
 const CarsPage = async () => {
     const cars = await getCars();
@@ -24,21 +23,7 @@ const CarsPage = async () => {
                                 className="w-[35%] rounded-2xl"
                                 placeholder="Search cars"
                             />
-                            <div className="flex items-center gap-2">
-                                <Button
-                                    variant="link"
-                                    className="text-base text-white"
-                                >
-                                    Sell with us
-                                </Button>
-                                <Button
-                                    variant="outline"
-                                    className="items-center rounded-xl text-base"
-                                >
-                                    <User2 size={18} />
-                                    Log in
-                                </Button>
-                            </div>
+                            <HeaderRight />
                         </div>
                         <div className="flex w-full border-y border-white py-2">
                             <ul className="flex flex-row gap-4 px-5 text-white">
@@ -58,7 +43,7 @@ const CarsPage = async () => {
                 <h2 className="text-3xl">All available</h2>
                 <div className="flex w-full flex-wrap items-center justify-center gap-4">
                     {cars.map((car) => {
-                        return <VehicleCard key={car.id} car={car} />;
+                        return <VehicleCard key={car.id} vehicle={car} />;
                     })}
                 </div>
             </div>
