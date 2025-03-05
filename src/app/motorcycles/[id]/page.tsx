@@ -1,4 +1,5 @@
 import Header from '@/app/_components/header';
+import SellerInfo from '@/app/_components/seller-info';
 import { getMotorcycleById } from '@/app/_data-access/motorcycle/get-motorcycle-by-id';
 import { getSellerById } from '@/app/_data-access/seller/get-seller-by-id';
 import { formatCurrency } from '@/app/_helpers/currency';
@@ -14,6 +15,8 @@ const MotorcycleDetailsPage = async ({ params: { id } }: { params: Params }) => 
     if (!motorcycle) return;
 
     const seller = await getSellerById(motorcycle.sellerId);
+
+    if (!seller) return;
 
     return (
         <div className="flex w-full flex-col items-center gap-4 p-3">
@@ -57,30 +60,7 @@ const MotorcycleDetailsPage = async ({ params: { id } }: { params: Params }) => 
                     <h2 className="mb-2 text-xl">About this motorcycle</h2>
                     <span>{motorcycle?.about}</span>
                 </div>
-                <div className="flex w-full flex-col gap-2 border-t-2 py-3 text-lg">
-                    <h2 className="mb-2 text-xl">For sale by</h2>
-                    <span className="text-lg">{seller?.name}</span>
-                    <div className="flex flex-col">
-                        <span className="text-slate-500">Adress</span>
-                        <span>{seller?.adress}</span>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-slate-500">E-mail</span>
-                        <span>{seller?.email}</span>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-slate-500">Phone number</span>
-                        <span>{seller?.phoneNumber}</span>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-slate-500">About</span>
-                        <span>{seller?.about}</span>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-slate-500">Registred since:</span>
-                        <span>{seller?.createdAt.getFullYear()}</span>
-                    </div>
-                </div>
+                <SellerInfo seller={seller} />
             </div>
         </div>
     );
