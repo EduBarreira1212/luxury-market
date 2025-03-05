@@ -1,9 +1,7 @@
 import Link from 'next/link';
-import NavbarPortal from '../_components/navbar-portal';
-import { Input } from '../_components/ui/input';
 import { getCars } from '../_data-access/car/get-cars';
 import VehicleCard from '../_components/vehicle-card';
-import HeaderRight from '../_components/header-right';
+import Header from '../_components/header';
 
 const CarsPage = async () => {
     const cars = await getCars();
@@ -14,17 +12,7 @@ const CarsPage = async () => {
                 <div className="absolute inset-0 bg-black bg-opacity-35"></div>
                 <div className="relative flex h-full flex-col justify-between gap-4 py-3">
                     <div className="flex flex-col gap-3">
-                        <div className="flex w-full flex-row items-center justify-between px-5">
-                            <div className="flex items-center gap-3">
-                                <NavbarPortal />
-                                <h1 className="text-xl text-white">Luxury Market</h1>
-                            </div>
-                            <Input
-                                className="w-[35%] rounded-2xl"
-                                placeholder="Search cars"
-                            />
-                            <HeaderRight />
-                        </div>
+                        <Header searchBarExists={true} variant="white" />
                         <div className="flex w-full border-y border-white py-2">
                             <ul className="flex flex-row gap-4 px-5 text-white">
                                 <li>
