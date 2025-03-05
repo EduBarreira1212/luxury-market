@@ -1,8 +1,7 @@
-import NavbarPortal from './_components/navbar-portal';
 import CategoryCard from './_components/category-card';
 import Link from 'next/link';
 import ImagesCarousel from './_components/images-carousel';
-import HeaderRight from './_components/header-right';
+import Header from './_components/header';
 
 export default function Home() {
     return (
@@ -12,13 +11,7 @@ export default function Home() {
                 <div className="absolute inset-0 z-10 bg-black bg-opacity-30"></div>
                 <div className="absolute inset-0 z-20 flex h-full flex-col justify-between gap-4 py-3">
                     <div className="flex flex-col gap-3">
-                        <div className="flex w-full flex-row justify-between px-5">
-                            <div className="flex items-center gap-3">
-                                <NavbarPortal />
-                                <h1 className="text-xl text-white">Luxury Market</h1>
-                            </div>
-                            <HeaderRight />
-                        </div>
+                        <Header searchBarExists={false} variant="white" />
                         <div className="flex w-full border-y border-white py-2">
                             <ul className="flex flex-row gap-4 px-5 text-white">
                                 <li>
