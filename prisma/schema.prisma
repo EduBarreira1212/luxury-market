@@ -37,7 +37,7 @@ model Buyer {
 
 model Car {
   id        String    @id @default(uuid())
-  userId    String
+  sellerId  String
   model     String
   brand     String
   year      Int
@@ -49,12 +49,12 @@ model Car {
   about     String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  seller    Seller    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seller    Seller    @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 }
 
 model Motorcycle {
   id        String    @id @default(uuid())
-  userId    String
+  sellerId  String
   model     String
   brand     String
   year      Int
@@ -65,7 +65,7 @@ model Motorcycle {
   about     String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  seller    Seller    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  seller    Seller    @relation(fields: [sellerId], references: [id], onDelete: Cascade)
 }
 
 enum FuelType {
