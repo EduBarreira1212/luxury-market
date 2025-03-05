@@ -55,7 +55,7 @@ const NavbarPortal = () => {
                     </ul>
                 </div>
                 <div className="mt-3 border-t border-black pt-3">
-                    <ul>
+                    <ul className="flex flex-col gap-2">
                         <li>
                             <Link href="/about">About</Link>
                         </li>
