@@ -8,9 +8,15 @@ type VehicleCardProps = {
     vehicle: Car | Motorcycle;
 };
 
+const carOrMotorcycle = (vehicle: Car | Motorcycle): vehicle is Car => {
+    return (vehicle as Car).gearbox !== undefined;
+};
+
 const VehicleCard = ({ vehicle }: VehicleCardProps) => {
     return (
-        <Link href="#">
+        <Link
+            href={`/${carOrMotorcycle(vehicle) ? 'cars' : 'motorcycles'}/${vehicle.id}`}
+        >
             <Card className="flex h-80 w-96 flex-col rounded-sm">
                 <CardContent className="relative h-full p-0">
                     <Image

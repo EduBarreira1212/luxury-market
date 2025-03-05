@@ -14,7 +14,7 @@ const NavbarPortal = () => {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant={'ghost'} className="px-0 text-white">
+                <Button variant={'ghost'} className="px-0">
                     <MenuIcon />
                 </Button>
             </SheetTrigger>
