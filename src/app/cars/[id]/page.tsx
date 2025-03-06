@@ -21,7 +21,7 @@ const CarDetailsPage = async ({ params: { id } }: { params: Params }) => {
     return (
         <div className="flex w-full flex-col items-center gap-4">
             <Header searchBarExists={false} variant="black" />
-            <div className="flex w-full flex-col items-center border-t-2 py-3">
+            <div className="flex w-full flex-col items-center gap-4 border-t-2 py-3">
                 <div className="relative h-44 w-2/5">
                     <Image
                         src="/images/fallback.png"
