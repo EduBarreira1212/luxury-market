@@ -3,9 +3,12 @@ import CreateSellerForm from './_components/create-seller-form';
 
 const CreateSellerPage = () => {
     return (
-        <div className="h-screen w-full">
+        <div className="flex h-screen w-full flex-col items-center gap-4">
             <Header searchBarExists={false} variant="black" />
-            <CreateSellerForm />
+            <div className="flex w-full flex-col items-center gap-4 border-t-2 py-3">
+                <h1 className="text-3xl">Create your seller account</h1>
+                <CreateSellerForm />
+            </div>
         </div>
     );
 };
