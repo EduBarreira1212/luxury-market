@@ -9,48 +9,115 @@ import { Input } from '@/app/_components/ui/input';
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
     FormMessage,
 } from '@/app/_components/ui/form';
+import { Textarea } from '@/app/_components/ui/textarea';
 
-const formSchema = z.object({
-    username: z.string().min(2, {
-        message: 'Username must be at least 2 characters.',
-    }),
+const sellerSchema = z.object({
+    name: z.string().min(3, 'The name must be at least 3 characters long'),
+    email: z.string().email('Invalid email'),
+    adress: z.string().min(5, 'Address is too short'),
+    phoneNumber: z.string().min(10, 'Invalid phone number'),
+    about: z
+        .string()
+        .trim()
+        .min(5, 'Minimum of 5 characters')
+        .max(500, 'Maximum of 500 characters allowed'),
 });
 
+type SellerFormValues = z.infer<typeof sellerSchema>;
+
 const CreateSellerForm = () => {
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+    const form = useForm<SellerFormValues>({
+        resolver: zodResolver(sellerSchema),
         defaultValues: {
-            username: '',
+            name: '',
+            email: '',
+            phoneNumber: '',
+            adress: '',
+            about: '',
         },
     });
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
+    const onSubmit = (values: SellerFormValues) => {
         console.log(values);
     };
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="flex w-80 flex-col gap-3 rounded-md border-2 p-5 shadow-sm"
+            >
                 <FormField
                     control={form.control}
-                    name="username"
+                    name="name"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Username</FormLabel>
+                            <FormLabel>Company name</FormLabel>
                             <FormControl>
-                                <Input placeholder="shadcn" {...field} />
+                                <Input {...field} />
                             </FormControl>
-                            <FormDescription>
-                                This is your public display name.
-                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>E-mail</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Phone number</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="adress"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Adress</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="about"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>About</FormLabel>
+                            <FormControl>
+                                <Textarea
+                                    placeholder="Tell us a little bit about your company"
+                                    className="resize-none"
+                                    {...field}
+                                />
+                            </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
