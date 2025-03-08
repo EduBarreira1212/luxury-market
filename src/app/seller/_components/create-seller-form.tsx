@@ -16,6 +16,7 @@ import {
 } from '@/app/_components/ui/form';
 import { Textarea } from '@/app/_components/ui/textarea';
 import { createSeller } from '@/app/_actions/create-seller';
+import { toast } from 'sonner';
 
 const sellerSchema = z.object({
     name: z.string().min(3, 'The name must be at least 3 characters long'),
@@ -45,7 +46,13 @@ const CreateSellerForm = () => {
 
     const onSubmit = async (values: SellerFormValues) => {
         console.log(values);
-        await createSeller(values);
+        try {
+            await createSeller(values);
+            toast.success('Seller account created with success');
+        } catch (error) {
+            console.error('Error when creating seller account', error);
+            toast.error('Error when creating seller account');
+        }
     };
 
     return (
