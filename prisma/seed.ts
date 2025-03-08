@@ -11,7 +11,7 @@ async function main() {
             id: sellerId,
             name: faker.person.fullName(),
             email: faker.internet.email(),
-            adress: faker.location.streetAddress(),
+            address: faker.location.streetAddress(),
             phoneNumber: faker.phone.number(),
             about: faker.lorem.sentence(),
         },
