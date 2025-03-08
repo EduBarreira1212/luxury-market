@@ -15,6 +15,7 @@ import {
     FormMessage,
 } from '@/app/_components/ui/form';
 import { Textarea } from '@/app/_components/ui/textarea';
+import { createSeller } from '@/app/_actions/create-seller';
 
 const sellerSchema = z.object({
     name: z.string().min(3, 'The name must be at least 3 characters long'),
@@ -28,7 +29,7 @@ const sellerSchema = z.object({
         .max(500, 'Maximum of 500 characters allowed'),
 });
 
-type SellerFormValues = z.infer<typeof sellerSchema>;
+export type SellerFormValues = z.infer<typeof sellerSchema>;
 
 const CreateSellerForm = () => {
     const form = useForm<SellerFormValues>({
@@ -42,8 +43,9 @@ const CreateSellerForm = () => {
         },
     });
 
-    const onSubmit = (values: SellerFormValues) => {
+    const onSubmit = async (values: SellerFormValues) => {
         console.log(values);
+        await createSeller(values);
     };
 
     return (
