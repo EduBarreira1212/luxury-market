@@ -10,7 +10,7 @@ const CarsPage = async () => {
         <>
             <div className="relative h-[85vh] w-full bg-[url('/images/lambo.jpg')] bg-cover bg-center">
                 <div className="absolute inset-0 bg-black bg-opacity-35"></div>
-                <div className="relative flex h-full flex-col justify-between gap-4 py-3">
+                <div className="relative flex h-full flex-col justify-between gap-4">
                     <div className="flex flex-col gap-3">
                         <Header searchBarExists={true} variant="white" />
                         <div className="flex w-full border-y border-white py-2">
