@@ -20,7 +20,7 @@ import { createSeller } from '@/app/_actions/create-seller';
 const sellerSchema = z.object({
     name: z.string().min(3, 'The name must be at least 3 characters long'),
     email: z.string().email('Invalid email'),
-    adress: z.string().min(5, 'Address is too short'),
+    address: z.string().min(5, 'Address is too short'),
     phoneNumber: z.string().min(10, 'Invalid phone number'),
     about: z
         .string()
@@ -38,7 +38,7 @@ const CreateSellerForm = () => {
             name: '',
             email: '',
             phoneNumber: '',
-            adress: '',
+            address: '',
             about: '',
         },
     });
@@ -96,10 +96,10 @@ const CreateSellerForm = () => {
                 />
                 <FormField
                     control={form.control}
-                    name="adress"
+                    name="address"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Adress</FormLabel>
+                            <FormLabel>Address</FormLabel>
                             <FormControl>
                                 <Input {...field} />
                             </FormControl>
