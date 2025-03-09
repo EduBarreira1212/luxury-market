@@ -9,7 +9,7 @@ export default function Home() {
             <div className="relative h-[85vh] w-full">
                 <ImagesCarousel />
                 <div className="absolute inset-0 z-10 bg-black bg-opacity-30"></div>
-                <div className="absolute inset-0 z-20 flex h-full flex-col justify-between gap-4 py-3">
+                <div className="absolute inset-0 z-20 flex h-full flex-col justify-between gap-4">
                     <div className="flex flex-col gap-3">
                         <Header searchBarExists={false} variant="white" />
                         <div className="flex w-full border-y border-white py-2">
