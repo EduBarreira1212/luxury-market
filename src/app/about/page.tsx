@@ -2,7 +2,7 @@ import Header from '../_components/header';
 
 const AboutPage = () => {
     return (
-        <div className="flex h-screen flex-col items-center gap-4 bg-gray-100 p-3">
+        <div className="flex h-screen flex-col items-center gap-4 bg-gray-100">
             <Header searchBarExists={false} variant="black" />
             <div className="max-w-4xl rounded-2xl bg-white p-8 shadow-lg">
                 <h1 className="mb-6 text-center text-4xl font-bold text-gray-900">
