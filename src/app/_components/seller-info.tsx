@@ -11,8 +11,8 @@ const SellerInfo = ({ seller }: SellerInfoProps) => {
             <h2 className="mb-2 text-xl">For sale by</h2>
             <span className="text-lg">{seller?.name}</span>
             <div className="flex flex-col">
-                <span className="text-slate-500">Adress</span>
-                <span>{seller?.adress}</span>
+                <span className="text-slate-500">Address</span>
+                <span>{seller?.address}</span>
             </div>
             <div className="flex flex-col">
                 <span className="text-slate-500">E-mail</span>
