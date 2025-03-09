@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import HeaderRight from './header-right';
 import NavbarPortal from './navbar-portal';
 import { Input } from './ui/input';
@@ -14,7 +15,9 @@ const Header = ({ searchBarExists, variant }: HeaderProps) => {
                 className={`flex items-center gap-3 ${variant == 'black' ? 'text-black' : 'text-white'}`}
             >
                 <NavbarPortal />
-                <h1 className="text-xl">Luxury Market</h1>
+                <Link href="/">
+                    <h1 className="text-xl">Luxury Market</h1>
+                </Link>
             </div>
             {searchBarExists && (
                 <Input className="w-[35%] rounded-2xl" placeholder="Search" />
