@@ -4,14 +4,14 @@ import { faker } from '@faker-js/faker';
 const prisma = new PrismaClient();
 
 async function main() {
-    const userId = faker.string.uuid();
+    const sellerId = faker.string.uuid();
 
     await prisma.seller.create({
         data: {
-            id: userId,
+            id: sellerId,
             name: faker.person.fullName(),
             email: faker.internet.email(),
-            adress: faker.location.streetAddress(),
+            address: faker.location.streetAddress(),
             phoneNumber: faker.phone.number(),
             about: faker.lorem.sentence(),
         },
@@ -21,7 +21,7 @@ async function main() {
         data: [
             {
                 id: faker.string.uuid(),
-                userId: userId,
+                sellerId: sellerId,
                 model: faker.vehicle.model(),
                 brand: faker.vehicle.manufacturer(),
                 year: faker.number.int({ min: 1990, max: new Date().getFullYear() }),
@@ -37,7 +37,7 @@ async function main() {
             },
             {
                 id: faker.string.uuid(),
-                userId: userId,
+                sellerId: sellerId,
                 model: faker.vehicle.model(),
                 brand: faker.vehicle.manufacturer(),
                 year: faker.number.int({ min: 1990, max: new Date().getFullYear() }),
@@ -53,7 +53,7 @@ async function main() {
             },
             {
                 id: faker.string.uuid(),
-                userId: userId,
+                sellerId: sellerId,
                 model: faker.vehicle.model(),
                 brand: faker.vehicle.manufacturer(),
                 year: faker.number.int({ min: 1990, max: new Date().getFullYear() }),
@@ -74,7 +74,7 @@ async function main() {
         data: [
             {
                 id: faker.string.uuid(),
-                userId: userId,
+                sellerId: sellerId,
                 model: faker.vehicle.model(),
                 brand: faker.vehicle.manufacturer(),
                 year: faker.number.int({ min: 1990, max: new Date().getFullYear() }),
@@ -89,7 +89,7 @@ async function main() {
             },
             {
                 id: faker.string.uuid(),
-                userId: userId,
+                sellerId: sellerId,
                 model: faker.vehicle.model(),
                 brand: faker.vehicle.manufacturer(),
                 year: faker.number.int({ min: 1990, max: new Date().getFullYear() }),
@@ -104,7 +104,7 @@ async function main() {
             },
             {
                 id: faker.string.uuid(),
-                userId: userId,
+                sellerId: sellerId,
                 model: faker.vehicle.model(),
                 brand: faker.vehicle.manufacturer(),
                 year: faker.number.int({ min: 1990, max: new Date().getFullYear() }),

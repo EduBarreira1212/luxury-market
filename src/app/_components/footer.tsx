@@ -1,4 +1,5 @@
 import { Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import Link from 'next/link';
 
 const Footer = () => {
     return (
@@ -9,12 +10,12 @@ const Footer = () => {
                 </div>
 
                 <nav className="mb-4 flex space-x-4 md:mb-0">
-                    <a href="#" className="hover:text-gray-400">
+                    <Link href="/" className="hover:text-gray-400">
                         Home
-                    </a>
-                    <a href="#" className="hover:text-gray-400">
+                    </Link>
+                    <Link href="/about" className="hover:text-gray-400">
                         About
-                    </a>
+                    </Link>
                     <a href="#" className="hover:text-gray-400">
                         Services
                     </a>

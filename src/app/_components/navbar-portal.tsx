@@ -14,7 +14,7 @@ const NavbarPortal = () => {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button variant={'ghost'} className="px-0 text-white">
+                <Button variant={'ghost'} className="px-0">
                     <MenuIcon />
                 </Button>
             </SheetTrigger>
@@ -55,7 +55,7 @@ const NavbarPortal = () => {
                     </ul>
                 </div>
                 <div className="mt-3 border-t border-black pt-3">
-                    <ul>
+                    <ul className="flex flex-col gap-2">
                         <li>
                             <Link href="/about">About</Link>
                         </li>
