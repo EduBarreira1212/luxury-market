@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import { db } from './prisma';
+import bcrypt from 'bcryptjs';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -9,11 +11,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 password: {},
             },
             authorize: async (credentials) => {
-                // logic to salt and hash password
-                // logic to verify if the user exists
-                // No user found, so this is their first attempt to login
-                // Optionally, this is also the place you could do a user registration
-                // return user object with their profile data
+                if (!credentials.email || !credentials.password) {
+                    throw new Error('E-mail and password are required.');
+                }
+
+                let user = await db.buyer.findUnique({
+                    where: { email: String(credentials.email) },
+                });
+
+                if (!user) {
+                    user = await db.seller.findUnique({
+                        where: { email: String(credentials.email) },
+                    });
+                }
+
+                if (!user) throw new Error('User not found.');
+
+                const passwordMatch = await bcrypt.compare(
+                    String(credentials.password),
+                    user.password,
+                );
+
+                if (!passwordMatch) throw new Error('Invalid credentials.');
+
+                return user;
             },
         }),
     ],
