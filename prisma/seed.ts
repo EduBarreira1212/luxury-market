@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
+import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
@@ -11,9 +12,20 @@ async function main() {
             id: sellerId,
             name: faker.person.fullName(),
             email: faker.internet.email(),
+            password: bcrypt.hashSync('Test12345@', 10),
             address: faker.location.streetAddress(),
             phoneNumber: faker.phone.number(),
             about: faker.lorem.sentence(),
+        },
+    });
+
+    await prisma.buyer.create({
+        data: {
+            id: faker.string.uuid(),
+            name: faker.person.fullName(),
+            email: faker.internet.email(),
+            password: bcrypt.hashSync('Test12345@', 10),
+            phoneNumber: faker.phone.number(),
         },
     });
 
