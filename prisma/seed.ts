@@ -12,7 +12,7 @@ async function main() {
             id: sellerId,
             name: faker.person.fullName(),
             email: faker.internet.email(),
-            password: bcrypt.hashSync('Test12345@', 10),
+            password: bcrypt.hashSync('Test12345@', 12),
             address: faker.location.streetAddress(),
             phoneNumber: faker.phone.number(),
             about: faker.lorem.sentence(),
@@ -24,7 +24,7 @@ async function main() {
             id: faker.string.uuid(),
             name: faker.person.fullName(),
             email: faker.internet.email(),
-            password: bcrypt.hashSync('Test12345@', 10),
+            password: bcrypt.hashSync('Test12345@', 12),
             phoneNumber: faker.phone.number(),
         },
     });
