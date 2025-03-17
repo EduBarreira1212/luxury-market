@@ -21,6 +21,20 @@ import { toast } from 'sonner';
 const sellerSchema = z.object({
     name: z.string().min(3, 'The name must be at least 3 characters long'),
     email: z.string().email('Invalid email'),
+    password: z
+        .string()
+        .min(8, { message: 'Password must be at least 8 characters long' })
+        .max(32, { message: 'Password must be no longer than 32 characters' })
+        .regex(/[A-Z]/, {
+            message: 'Password must contain at least one uppercase letter',
+        })
+        .regex(/[a-z]/, {
+            message: 'Password must contain at least one lowercase letter',
+        })
+        .regex(/[0-9]/, { message: 'Password must contain at least one number' })
+        .regex(/[\W_]/, {
+            message: 'Password must contain at least one special character',
+        }),
     address: z.string().min(5, 'Address is too short'),
     phoneNumber: z.string().min(10, 'Invalid phone number'),
     about: z
@@ -38,6 +52,7 @@ const CreateSellerForm = () => {
         defaultValues: {
             name: '',
             email: '',
+            password: '',
             phoneNumber: '',
             address: '',
             about: '',
@@ -81,6 +96,20 @@ const CreateSellerForm = () => {
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>E-mail</FormLabel>
+                            <FormControl>
+                                <Input {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Password</FormLabel>
                             <FormControl>
                                 <Input {...field} />
                             </FormControl>
