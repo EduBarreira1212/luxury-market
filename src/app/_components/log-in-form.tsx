@@ -14,6 +14,7 @@ import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
+import { signIn } from 'next-auth/react';
 
 const logInSchema = z.object({
     email: z.string().email('Invalid email'),
@@ -47,9 +48,8 @@ const LogInForm = () => {
     const onSubmit = async (values: LogInFormValues) => {
         console.log(values);
         try {
-            //function to login
-
-            toast.success('Log in realized with sucess');
+            signIn('credentials', values);
+            toast.success(`Welcome`);
         } catch (error) {
             console.error('Error when log in', error);
             toast.error('Error when log in');
