@@ -15,6 +15,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 const logInSchema = z.object({
     email: z.string().email('Invalid email'),
@@ -37,6 +38,8 @@ const logInSchema = z.object({
 export type LogInFormValues = z.infer<typeof logInSchema>;
 
 const LogInForm = () => {
+    const { data: session } = useSession();
+
     const form = useForm<LogInFormValues>({
         resolver: zodResolver(logInSchema),
         defaultValues: {
@@ -56,7 +59,7 @@ const LogInForm = () => {
             if (result?.error) {
                 return toast.error(`E-mail or password invalid.`);
             }
-            toast.success(`Welcome`);
+            toast.success(`Welcome ${session?.user?.name}`);
         } catch (error) {
             console.error('Error when log in', error);
             toast.error('Error when log in');
