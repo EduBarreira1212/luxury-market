@@ -48,7 +48,14 @@ const LogInForm = () => {
     const onSubmit = async (values: LogInFormValues) => {
         console.log(values);
         try {
-            signIn('credentials', values);
+            const result = await signIn('credentials', {
+                redirect: false,
+                email: values.email,
+                password: values.password,
+            });
+            if (result?.error) {
+                return toast.error(`E-mail or password invalid.`);
+            }
             toast.success(`Welcome`);
         } catch (error) {
             console.error('Error when log in', error);
