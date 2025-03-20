@@ -1,5 +1,6 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
 import { db } from '../_lib/prisma';
 
 type UpdateSellerParams = {
@@ -22,6 +23,8 @@ export const updateSeller = async (
                 password: true,
             },
         });
+
+        revalidatePath('/account');
     } catch (error) {
         console.error('Error updating seller:', error);
         throw new Error('Failed to update seller.');
