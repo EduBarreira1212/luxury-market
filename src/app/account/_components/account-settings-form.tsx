@@ -4,6 +4,7 @@ import AccountSettingCard from './account-setting-card';
 import { BuyerResponseDTO } from '../../_data-access/buyer/get-buyer-by-id';
 import { SellerResponseDTO } from '../../_data-access/seller/get-seller-by-id';
 import { updateSeller } from '@/app/_actions/update-seller';
+import { updateBuyer } from '@/app/_actions/update-buyer';
 
 type AccountSettingsFormProps = {
     id: string;
@@ -17,13 +18,16 @@ const AccountSettingsForm = ({
     accountType,
 }: AccountSettingsFormProps) => {
     const handleUpdate = async (field: string, value: string) => {
-        if (accountType === 'seller') {
+        if (accountType === 'seller' && 'about' in accountData) {
             await updateSeller(id, {
                 ...accountData,
                 [field]: value,
-            } as any);
+            });
         }
-        // TODO: Implement updateBuyer if needed
+        await updateBuyer(id, {
+            ...accountData,
+            [field]: value,
+        });
     };
 
     return (
