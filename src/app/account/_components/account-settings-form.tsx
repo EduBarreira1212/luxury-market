@@ -5,9 +5,9 @@ import { BuyerResponseDTO } from '../../_data-access/buyer/get-buyer-by-id';
 import { SellerResponseDTO } from '../../_data-access/seller/get-seller-by-id';
 import { updateSeller } from '@/app/_actions/update-seller';
 import { updateBuyer } from '@/app/_actions/update-buyer';
-import AccountPasswordCard from './account-password-card';
 import { updateSellerPassword } from '@/app/_actions/update-seller-password';
 import { updateBuyerPassword } from '@/app/_actions/update-buyer-password';
+import AccountPasswordUpdateForm from './account-password-update-form';
 
 type AccountSettingsFormProps = {
     id: string;
@@ -26,6 +26,7 @@ const AccountSettingsForm = ({
                 ...accountData,
                 [field]: value,
             });
+            return;
         }
         await updateBuyer(id, {
             ...accountData,
@@ -39,8 +40,8 @@ const AccountSettingsForm = ({
     ) => {
         if (accountType === 'seller') {
             await updateSellerPassword(id, currentPassword, newPassword);
+            return;
         }
-
         await updateBuyerPassword(id, currentPassword, newPassword);
     };
 
@@ -77,7 +78,7 @@ const AccountSettingsForm = ({
                     />
                 </>
             )}
-            <AccountPasswordCard
+            <AccountPasswordUpdateForm
                 onSave={(currentPassword, newPassword) =>
                     handlePasswordUpdate(currentPassword, newPassword)
                 }
