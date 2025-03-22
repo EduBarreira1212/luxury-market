@@ -13,7 +13,7 @@ const AccountPage = async () => {
     if (!account?.data) return null;
 
     return (
-        <div className="flex h-screen w-full flex-col items-center gap-4">
+        <div className="flex w-full flex-col items-center gap-4">
             <Header searchBarExists={false} variant="black" />
             <AccountSettingsForm
                 id={session.user.id}
