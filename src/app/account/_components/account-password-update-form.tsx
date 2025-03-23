@@ -69,6 +69,7 @@ const AccountPasswordUpdateForm = ({ onSave }: AccountPasswordCardProps) => {
         try {
             await onSave(values.currentPassword, values.newPassword);
             setUpdateIsOpen(false);
+            form.reset();
             toast.success('Password update with sucess');
         } catch (error) {
             console.error('Failed to save:', error);
