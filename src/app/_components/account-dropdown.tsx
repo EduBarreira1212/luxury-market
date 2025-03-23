@@ -11,6 +11,7 @@ import {
     DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { ChevronDown } from 'lucide-react';
+import Link from 'next/link';
 
 type AccountDropdownProps = {
     textColor: string;
@@ -26,7 +27,15 @@ const AccountDropdown = ({ textColor, username }: AccountDropdownProps) => {
             <DropdownMenuContent className="flex flex-col items-center">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Account</DropdownMenuItem>
+                <DropdownMenuItem className="w-full">
+                    <Button
+                        variant="ghost"
+                        className="flex w-full items-center"
+                        asChild
+                    >
+                        <Link href="/account">Account</Link>
+                    </Button>
+                </DropdownMenuItem>
                 <DropdownMenuItem className="w-full">
                     <Button
                         variant="ghost"
