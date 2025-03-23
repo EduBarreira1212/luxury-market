@@ -77,6 +77,11 @@ const AccountPasswordUpdateForm = ({ onSave }: AccountPasswordCardProps) => {
         }
     };
 
+    const handleCancelClick = () => {
+        setUpdateIsOpen(false);
+        form.reset();
+    };
+
     return (
         <>
             {updateIsOpen ? (
@@ -134,7 +139,7 @@ const AccountPasswordUpdateForm = ({ onSave }: AccountPasswordCardProps) => {
                     <Button
                         variant="ghost"
                         className="text-xl"
-                        onClick={() => setUpdateIsOpen(false)}
+                        onClick={handleCancelClick}
                     >
                         Cancel
                     </Button>
