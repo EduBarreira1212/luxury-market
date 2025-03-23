@@ -66,7 +66,6 @@ const AccountPasswordUpdateForm = ({ onSave }: AccountPasswordCardProps) => {
     });
 
     const onSubmit = async (values: UpdatePasswordFormValues) => {
-        console.log(values);
         try {
             await onSave(values.currentPassword, values.newPassword);
             setUpdateIsOpen(false);
@@ -108,7 +107,7 @@ const AccountPasswordUpdateForm = ({ onSave }: AccountPasswordCardProps) => {
                                         <FormItem>
                                             <FormLabel>New password</FormLabel>
                                             <FormControl>
-                                                <Input {...field} />
+                                                <Input type="password" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -121,7 +120,7 @@ const AccountPasswordUpdateForm = ({ onSave }: AccountPasswordCardProps) => {
                                         <FormItem>
                                             <FormLabel>Confirm password</FormLabel>
                                             <FormControl>
-                                                <Input {...field} />
+                                                <Input type="password" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
