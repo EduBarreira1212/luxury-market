@@ -86,7 +86,7 @@ const AccountPasswordUpdateForm = ({ onSave }: AccountPasswordCardProps) => {
                         <Form {...form}>
                             <form
                                 onSubmit={form.handleSubmit(onSubmit)}
-                                className="flex w-80 flex-col gap-3 rounded-md border-2 p-5 shadow-sm"
+                                className="flex flex-col gap-3"
                             >
                                 <FormField
                                     control={form.control}
