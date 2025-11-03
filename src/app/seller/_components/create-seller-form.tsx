@@ -3,8 +3,6 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
 import { Button } from '@/app/_components/ui/button';
 import { Input } from '@/app/_components/ui/input';
 import {
@@ -38,7 +36,7 @@ import { toast } from 'sonner';
 import {
     Mail,
     Building2,
-    Phone,
+    Phone as PhoneIcon,
     MapPin,
     Eye,
     EyeOff,
@@ -47,50 +45,10 @@ import {
     Loader2,
 } from 'lucide-react';
 
-const sellerSchema = z.object({
-    name: z.string().min(3, 'The name must be at least 3 characters long'),
-    email: z.string().email('Invalid email'),
-    password: z
-        .string()
-        .min(8, { message: 'Password must be at least 8 characters long' })
-        .max(32, { message: 'Password must be no longer than 32 characters' })
-        .regex(/[A-Z]/, {
-            message: 'Password must contain at least one uppercase letter',
-        })
-        .regex(/[a-z]/, {
-            message: 'Password must contain at least one lowercase letter',
-        })
-        .regex(/[0-9]/, { message: 'Password must contain at least one number' })
-        .regex(/[\W_]/, {
-            message: 'Password must contain at least one special character',
-        }),
-    address: z.string().min(5, 'Address is too short'),
-    phoneNumber: z.string().min(10, 'Invalid phone number'),
-    about: z
-        .string()
-        .trim()
-        .min(5, 'Minimum of 5 characters')
-        .max(500, 'Maximum of 500 characters allowed'),
-});
+import PhoneInput from 'react-phone-number-input';
 
-export type SellerFormValues = z.infer<typeof sellerSchema>;
-
-function formatBrazilPhone(value: string) {
-    // Keep only digits
-    const digits = value.replace(/\D/g, '');
-    // (99) 99999-9999 or (99) 9999-9999
-    if (digits.length <= 10) {
-        return digits
-            .replace(/(\d{2})(\d)/, '($1) $2')
-            .replace(/(\d{4})(\d)/, '$1-$2')
-            .slice(0, 14);
-    }
-    // 11+ digits -> mobile pattern
-    return digits
-        .replace(/(\d{2})(\d)/, '($1) $2')
-        .replace(/(\d{5})(\d)/, '$1-$2')
-        .slice(0, 15);
-}
+import { sellerSchema, type SellerFormValues } from '@/app/_schemas/seller';
+import CustomPhoneInput from './CustomPhoneInput';
 
 function passwordStrength(pw: string) {
     let score = 0;
@@ -127,6 +85,7 @@ export default function CreateSellerForm() {
 
     const onSubmit = async (values: SellerFormValues) => {
         try {
+            // values.phoneNumber chega em E.164 (ex.: +5511999999999)
             await createSeller(values);
             toast.success('Seller account created successfully');
             form.reset();
@@ -185,6 +144,7 @@ export default function CreateSellerForm() {
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="email"
@@ -212,6 +172,7 @@ export default function CreateSellerForm() {
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="password"
@@ -273,6 +234,7 @@ export default function CreateSellerForm() {
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="phoneNumber"
@@ -280,33 +242,40 @@ export default function CreateSellerForm() {
                                         <FormItem>
                                             <FormLabel>Phone number</FormLabel>
                                             <div className="relative">
-                                                <Phone className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-60" />
+                                                <PhoneIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-60" />
                                                 <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        type="tel"
-                                                        inputMode="tel"
-                                                        autoComplete="tel"
-                                                        placeholder="(11) 99999-9999"
-                                                        className="pl-9"
-                                                        onChange={(e) =>
-                                                            field.onChange(
-                                                                formatBrazilPhone(
-                                                                    e.target.value,
-                                                                ),
-                                                            )
-                                                        }
-                                                    />
+                                                    <div className="pl-9">
+                                                        <PhoneInput
+                                                            {...field}
+                                                            value={field.value}
+                                                            onChange={(val) =>
+                                                                field.onChange(
+                                                                    val ?? '',
+                                                                )
+                                                            }
+                                                            defaultCountry="BR"
+                                                            international
+                                                            countryCallingCodeEditable={
+                                                                false
+                                                            }
+                                                            inputComponent={
+                                                                CustomPhoneInput
+                                                            }
+                                                            placeholder="Enter your phone number"
+                                                            className="phone-input flex items-center gap-2"
+                                                        />
+                                                    </div>
                                                 </FormControl>
                                             </div>
                                             <FormDescription>
-                                                Brazil format is supported
-                                                automatically.
+                                                Supports all countries. Saved in
+                                                international format (+…).
                                             </FormDescription>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="address"
@@ -329,6 +298,7 @@ export default function CreateSellerForm() {
                                         </FormItem>
                                     )}
                                 />
+
                                 <FormField
                                     control={form.control}
                                     name="about"
