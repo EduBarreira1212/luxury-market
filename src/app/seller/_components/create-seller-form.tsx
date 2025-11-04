@@ -85,7 +85,6 @@ export default function CreateSellerForm() {
 
     const onSubmit = async (values: SellerFormValues) => {
         try {
-            // values.phoneNumber chega em E.164 (ex.: +5511999999999)
             await createSeller(values);
             toast.success('Seller account created successfully');
             form.reset();
