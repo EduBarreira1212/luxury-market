@@ -22,7 +22,7 @@ const HeaderRight = async ({ textColor }: HeaderRightProp) => {
                             className={`text-base text-${textColor}`}
                             asChild
                         >
-                            <Link href="/seller">My ads</Link>
+                            <Link href="/my-ads">My ads</Link>
                         </Button>
                     )}
                     <AccountDropdown
