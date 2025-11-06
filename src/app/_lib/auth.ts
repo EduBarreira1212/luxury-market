@@ -2,6 +2,9 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { db } from './prisma';
 import bcrypt from 'bcryptjs';
+import { AppUser } from '../_types/auth';
+
+type UserRole = 'seller' | 'buyer';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     providers: [
@@ -15,46 +18,67 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                     throw new Error('E-mail and password are required.');
                 }
 
-                let user = await db.buyer.findUnique({
+                const buyer = await db.buyer.findUnique({
                     where: { email: String(credentials.email) },
+                    select: { id: true, name: true, email: true, password: true },
                 });
 
-                if (!user) {
-                    user = await db.seller.findUnique({
-                        where: { email: String(credentials.email) },
-                    });
+                let role: UserRole | null = null;
+                let user: {
+                    id: string;
+                    name: string;
+                    email: string;
+                    password: string;
+                } | null = null;
+
+                if (buyer) {
+                    user = buyer;
+                    role = 'buyer';
                 }
 
-                if (!user) throw new Error('User not found.');
+                if (!buyer) {
+                    const seller = await db.seller.findUnique({
+                        where: { email: String(credentials.email) },
+                        select: {
+                            id: true,
+                            name: true,
+                            email: true,
+                            password: true,
+                        },
+                    });
 
-                const passwordMatch = await bcrypt.compare(
+                    if (seller) {
+                        user = seller;
+                        role = 'seller';
+                    }
+                }
+
+                if (!user || !role) return null;
+
+                const ok = await bcrypt.compare(
                     String(credentials.password),
                     user.password,
                 );
+                if (!ok) return null;
 
-                if (!passwordMatch) throw new Error('Invalid credentials.');
-
-                return {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                };
+                return { id: user.id, name: user.name, email: user.email, role };
             },
         }),
     ],
-    session: {
-        strategy: 'jwt',
-    },
+    session: { strategy: 'jwt' },
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id;
+                const u = user as AppUser;
+                token.id = u.id;
+                token.role = u.role;
             }
             return token;
         },
         async session({ session, token }) {
             if (session.user) {
                 session.user.id = String(token.id);
+                session.user.role = token.role as 'buyer' | 'seller';
             }
             return session;
         },
