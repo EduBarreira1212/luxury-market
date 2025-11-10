@@ -7,11 +7,13 @@ export const createMotorcycle = async (
     createMotorcycleParams: MotorcycleFormValues,
 ) => {
     try {
-        await db.motorcycle.create({
+        const motorcycle = await db.motorcycle.create({
             data: createMotorcycleParams,
         });
+
+        return motorcycle;
     } catch (error) {
         console.error('Error creating motorcycle:', error);
-        throw new Error('Failed to create motorcycle.');
+        throw error;
     }
 };
