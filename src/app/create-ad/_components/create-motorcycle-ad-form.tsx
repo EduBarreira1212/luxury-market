@@ -26,6 +26,10 @@ import { Input } from '@/app/_components/ui/input';
 import { Separator } from '@/app/_components/ui/separator';
 import { Textarea } from '@/app/_components/ui/textarea';
 import { MotorcycleFormValues, motorcycleSchema } from '@/app/_schemas/motorcycle';
+import { createMotorcycle } from '@/app/_actions/create-motorcycle';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { useEffect } from 'react';
 
 const conditionOptions = [
     { value: 'NEW', label: 'New' },
@@ -33,10 +37,14 @@ const conditionOptions = [
 ] as const;
 
 const CreateMotorcycleAdForm = () => {
+    const router = useRouter();
+    const { data: session } = useSession();
+
     const form = useForm<MotorcycleFormValues>({
         resolver: zodResolver(motorcycleSchema),
         mode: 'onChange',
         defaultValues: {
+            sellerId: '',
             brand: '',
             model: '',
             year: new Date().getFullYear(),
@@ -51,11 +59,28 @@ const CreateMotorcycleAdForm = () => {
 
     const about = form.watch('about');
 
+    const sellerIdFromSession = session?.user?.id;
+
+    useEffect(() => {
+        if (
+            sellerIdFromSession &&
+            form.getValues('sellerId') !== sellerIdFromSession
+        ) {
+            form.setValue('sellerId', sellerIdFromSession, {
+                shouldValidate: true,
+            });
+        }
+    }, [sellerIdFromSession, form]);
+
     const onSubmit = async (values: MotorcycleFormValues) => {
         try {
-            // TODO: replace with real create motorcycle action
-            toast.success('Motorcycle ad created successfully');
-            form.reset();
+            const motorcycle = await createMotorcycle(values);
+            if (motorcycle) {
+                toast.success('Motorcycle ad created successfully');
+                form.reset();
+                router.push('/my-ads');
+                router.refresh();
+            }
         } catch (error) {
             console.error('Error when creating motorcycle ad', error);
             toast.error('Error when creating motorcycle ad');
@@ -302,6 +327,11 @@ const CreateMotorcycleAdForm = () => {
                                 Publish motorcycle
                             </Button>
                         </div>
+                        {!sellerIdFromSession && (
+                            <p className="text-sm text-destructive">
+                                Log in with a seller account to publish ads.
+                            </p>
+                        )}
                     </CardFooter>
                 </form>
             </Form>
