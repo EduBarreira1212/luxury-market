@@ -5,11 +5,13 @@ import { CarFormValues } from '../_schemas/car';
 
 export const createCar = async (createCarParams: CarFormValues) => {
     try {
-        await db.car.create({
+        const car = await db.car.create({
             data: createCarParams,
         });
+
+        return car;
     } catch (error) {
         console.error('Error creating car:', error);
-        throw new Error('Failed to create car.');
+        throw error;
     }
 };
