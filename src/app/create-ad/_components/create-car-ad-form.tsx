@@ -1,5 +1,14 @@
 'use client';
 
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
+
+import { createCar } from '@/app/_actions/create-car';
 import { Button } from '@/app/_components/ui/button';
 import {
     Card,
@@ -9,22 +18,18 @@ import {
     CardTitle,
 } from '@/app/_components/ui/card';
 import {
+    Form,
+    FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
-    FormControl,
     FormMessage,
-    FormDescription,
-    Form,
 } from '@/app/_components/ui/form';
 import { Input } from '@/app/_components/ui/input';
 import { Textarea } from '@/app/_components/ui/textarea';
+import { Separator } from '@/app/_components/ui/separator';
 import { CarFormValues, carSchema } from '@/app/_schemas/car';
-import { Separator } from '@radix-ui/react-dropdown-menu';
-import { Loader2 } from 'lucide-react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from 'sonner';
-import { useForm } from 'react-hook-form';
 
 const fuelOptions = [
     { value: 'GASOLINE', label: 'Gasoline' },
@@ -46,10 +51,14 @@ const conditionOptions = [
 ] as const;
 
 const CreateCarAdForm = () => {
+    const router = useRouter();
+    const { data: session } = useSession();
+
     const form = useForm<CarFormValues>({
         resolver: zodResolver(carSchema),
         mode: 'onChange',
         defaultValues: {
+            sellerId: '',
             brand: '',
             model: '',
             year: new Date().getFullYear(),
@@ -65,11 +74,28 @@ const CreateCarAdForm = () => {
 
     const about = form.watch('about');
 
+    const sellerIdFromSession = session?.user?.id;
+
+    useEffect(() => {
+        if (
+            sellerIdFromSession &&
+            form.getValues('sellerId') !== sellerIdFromSession
+        ) {
+            form.setValue('sellerId', sellerIdFromSession, {
+                shouldValidate: true,
+            });
+        }
+    }, [sellerIdFromSession, form]);
+
     const onSubmit = async (values: CarFormValues) => {
         try {
-            // TODO: replace with real create car action
-            toast.success('Car ad created successfully');
-            form.reset();
+            const car = await createCar(values);
+            if (car) {
+                toast.success('Car ad created successfully');
+                form.reset();
+                router.push('/my-ads');
+                router.refresh();
+            }
         } catch (error) {
             console.error('Error when creating car ad', error);
             toast.error('Error when creating car ad');
@@ -381,7 +407,10 @@ const CreateCarAdForm = () => {
                                 </Button>
                                 <Button
                                     type="submit"
-                                    disabled={form.formState.isSubmitting}
+                                    disabled={
+                                        form.formState.isSubmitting ||
+                                        !sellerIdFromSession
+                                    }
                                 >
                                     {form.formState.isSubmitting && (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -389,6 +418,11 @@ const CreateCarAdForm = () => {
                                     Publish car
                                 </Button>
                             </div>
+                            {!sellerIdFromSession && (
+                                <p className="text-sm text-destructive">
+                                    Log in with a seller account to publish ads.
+                                </p>
+                            )}
                         </CardFooter>
                     </form>
                 </Form>
