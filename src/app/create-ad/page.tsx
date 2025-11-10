@@ -1,12 +1,10 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsTrigger } from '../_components/ui/tabs';
 import { TabsList } from '@radix-ui/react-tabs';
-import { Card, CardContent, CardHeader, CardTitle } from '../_components/ui/card';
-import { Button } from '../_components/ui/button';
-import { Label } from '../_components/ui/label';
-import { Input } from '../_components/ui/input';
 import Header from '../_components/header';
 import { Bike, Car } from 'lucide-react';
+import CreateCarAdForm from './_components/create-car-ad-form';
+import CreateMotorcycleAdForm from './_components/create-motorcycle-ad-form';
 
 const CreateAdPage = () => {
     return (
@@ -36,129 +34,11 @@ const CreateAdPage = () => {
                             <span>Motorcycle</span>
                         </TabsTrigger>
                     </TabsList>
-
-                    {/* ==== CAR FORM ==== */}
                     <TabsContent value="car" className="mt-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>New Car Ad</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                    <div>
-                                        <Label htmlFor="car-title">Title</Label>
-                                        <Input
-                                            id="car-title"
-                                            placeholder="e.g., Honda Civic EX 2020"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="car-price">Price</Label>
-                                        <Input
-                                            id="car-price"
-                                            type="number"
-                                            placeholder="e.g., 85000"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="car-brand">Brand</Label>
-                                        <Input
-                                            id="car-brand"
-                                            placeholder="e.g., Honda"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="car-model">Model</Label>
-                                        <Input
-                                            id="car-model"
-                                            placeholder="e.g., Civic EX"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="car-year">Year</Label>
-                                        <Input
-                                            id="car-year"
-                                            type="number"
-                                            placeholder="e.g., 2020"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="car-image">Image URL</Label>
-                                        <Input
-                                            id="car-image"
-                                            type="url"
-                                            placeholder="https://..."
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-end">
-                                    <Button type="button">Publish Car</Button>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <CreateCarAdForm />
                     </TabsContent>
-
-                    {/* ==== MOTORCYCLE FORM ==== */}
                     <TabsContent value="motorcycle" className="mt-6">
-                        <Card>
-                            <CardHeader>
-                                <CardTitle>New Motorcycle Ad</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-4">
-                                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                                    <div>
-                                        <Label htmlFor="moto-title">Title</Label>
-                                        <Input
-                                            id="moto-title"
-                                            placeholder="e.g., Yamaha MT-07 2022"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="moto-price">Price</Label>
-                                        <Input
-                                            id="moto-price"
-                                            type="number"
-                                            placeholder="e.g., 42000"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="moto-brand">Brand</Label>
-                                        <Input
-                                            id="moto-brand"
-                                            placeholder="e.g., Yamaha"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="moto-model">Model</Label>
-                                        <Input
-                                            id="moto-model"
-                                            placeholder="e.g., MT-07"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="moto-year">Year</Label>
-                                        <Input
-                                            id="moto-year"
-                                            type="number"
-                                            placeholder="e.g., 2022"
-                                        />
-                                    </div>
-                                    <div>
-                                        <Label htmlFor="moto-image">Image URL</Label>
-                                        <Input
-                                            id="moto-image"
-                                            type="url"
-                                            placeholder="https://..."
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex justify-end">
-                                    <Button type="button">Publish Motorcycle</Button>
-                                </div>
-                            </CardContent>
-                        </Card>
+                        <CreateMotorcycleAdForm />
                     </TabsContent>
                 </Tabs>
             </div>
