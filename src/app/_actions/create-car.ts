@@ -1,8 +1,9 @@
 'use server';
 
 import { db } from '../_lib/prisma';
+import { CarFormValues } from '../_schemas/car';
 
-export const createCar = async (createCarParams: any) => {
+export const createCar = async (createCarParams: CarFormValues) => {
     try {
         await db.car.create({
             data: createCarParams,
