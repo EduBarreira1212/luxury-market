@@ -48,7 +48,7 @@ const AdCard = ({ ad }: { ad: Ad }) => {
                     {new Intl.NumberFormat('en-US', {
                         style: 'currency',
                         currency: 'USD',
-                    }).format(ad.price / 100)}
+                    }).format(ad.price)}
                 </p>
             </div>
         </Link>
