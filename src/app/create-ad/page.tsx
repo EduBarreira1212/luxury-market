@@ -22,7 +22,7 @@ const CreateAdPage = () => {
                             value="car"
                             className="group relative flex w-1/2 items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[state=active]:bg-background data-[state=active]:shadow"
                         >
-                            <Car className="h-4 w-4 transition-transform group-data-[state=active]:scale-110" />
+                            <Car className="h-5 w-5 transition-transform group-data-[state=active]:scale-110" />
                             <span>Car</span>
                         </TabsTrigger>
 
@@ -30,7 +30,7 @@ const CreateAdPage = () => {
                             value="motorcycle"
                             className="group relative flex w-1/2 items-center justify-center gap-2 rounded-lg py-3 text-base font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-[state=active]:bg-background data-[state=active]:shadow"
                         >
-                            <Bike className="h-4 w-4 transition-transform group-data-[state=active]:scale-110" />
+                            <Bike className="h-5 w-5 transition-transform group-data-[state=active]:scale-110" />
                             <span>Motorcycle</span>
                         </TabsTrigger>
                     </TabsList>
