@@ -1,3 +1,4 @@
+import EditDeleteContainer from '@/app/_components/edit-delete-container';
 import Header from '@/app/_components/header';
 import SellerInfo from '@/app/_components/seller-info';
 import SpecItem from '@/app/_components/spec-item';
@@ -44,18 +45,7 @@ const MotorcycleDetailsPage = async ({ params: { id } }: { params: Params }) => 
                         </span>
 
                         {isOwner && (
-                            <div className="flex items-center gap-2">
-                                <Button size="sm" className="rounded-xl">
-                                    EDIT
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    variant="destructive"
-                                    className="rounded-xl"
-                                >
-                                    DELETE
-                                </Button>
-                            </div>
+                            <EditDeleteContainer id={motorcycle.id} isCar={false} />
                         )}
                     </div>
                 </section>
