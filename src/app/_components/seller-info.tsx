@@ -1,8 +1,8 @@
-import { Seller } from '@prisma/client';
 import React from 'react';
+import { SellerResponseDTO } from '../_data-access/seller/get-seller-by-id';
 
 type SellerInfoProps = {
-    seller: Seller;
+    seller: SellerResponseDTO;
 };
 
 const SellerInfo = ({ seller }: SellerInfoProps) => {
