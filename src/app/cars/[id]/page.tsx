@@ -1,3 +1,5 @@
+import BackButton from '@/app/_components/back-button';
+import EditDeleteContainer from '@/app/_components/edit-delete-container';
 import Header from '@/app/_components/header';
 import SellerInfo from '@/app/_components/seller-info';
 import SpecItem from '@/app/_components/spec-item';
@@ -30,6 +32,8 @@ const CarDetailsPage = async ({ params: { id } }: { params: Params }) => {
             <Header searchBarExists={false} variant="black" />
 
             <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:py-8">
+                <BackButton />
+
                 <section className="mb-4 flex flex-col items-start justify-between gap-3 sm:mb-6 sm:flex-row sm:items-center">
                     <h1 className="text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">
                         {title}
@@ -43,20 +47,7 @@ const CarDetailsPage = async ({ params: { id } }: { params: Params }) => {
                             {price}
                         </span>
 
-                        {isOwner && (
-                            <div className="flex items-center gap-2">
-                                <Button size="sm" className="rounded-xl">
-                                    EDIT
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    variant="destructive"
-                                    className="rounded-xl"
-                                >
-                                    DELETE
-                                </Button>
-                            </div>
-                        )}
+                        {isOwner && <EditDeleteContainer id={car.id} isCar={true} />}
                     </div>
                 </section>
 
