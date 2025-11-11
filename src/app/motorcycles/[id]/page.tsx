@@ -1,3 +1,4 @@
+import BackButton from '@/app/_components/back-button';
 import EditDeleteContainer from '@/app/_components/edit-delete-container';
 import Header from '@/app/_components/header';
 import SellerInfo from '@/app/_components/seller-info';
@@ -31,6 +32,7 @@ const MotorcycleDetailsPage = async ({ params: { id } }: { params: Params }) => 
             <Header searchBarExists={false} variant="black" />
 
             <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:py-8">
+                <BackButton />
                 <section className="mb-4 flex flex-col items-start justify-between gap-3 sm:mb-6 sm:flex-row sm:items-center">
                     <h1 className="text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">
                         {title}
