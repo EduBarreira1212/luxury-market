@@ -2,7 +2,7 @@
 
 import bcrypt from 'bcryptjs';
 import { db } from '../_lib/prisma';
-import { SellerFormValues } from '../seller/_components/create-seller-form';
+import { SellerFormValues } from '../_schemas/seller';
 
 export const createSeller = async (createSellerParams: SellerFormValues) => {
     const { password, ...otherParams } = createSellerParams;
