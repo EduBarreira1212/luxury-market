@@ -14,16 +14,33 @@ const HeaderRight = async ({ textColor }: HeaderRightProp) => {
 
     return (
         <div className="flex items-center gap-2">
-            <Button variant="link" className={`text-base text-${textColor}`} asChild>
-                <Link href="/seller">Sell with us</Link>
-            </Button>
             {session?.user ? (
-                <AccountDropdown
-                    textColor={textColor}
-                    username={session.user.name!}
-                />
+                <>
+                    {session.user.role == 'seller' && (
+                        <Button
+                            variant="link"
+                            className={`text-base text-${textColor}`}
+                            asChild
+                        >
+                            <Link href="/my-ads">My ads</Link>
+                        </Button>
+                    )}
+                    <AccountDropdown
+                        textColor={textColor}
+                        username={session.user.name!}
+                    />
+                </>
             ) : (
-                <LogInDialog />
+                <>
+                    <Button
+                        variant="link"
+                        className={`text-base text-${textColor}`}
+                        asChild
+                    >
+                        <Link href="/seller">Sell with us</Link>
+                    </Button>
+                    <LogInDialog />
+                </>
             )}
         </div>
     );
