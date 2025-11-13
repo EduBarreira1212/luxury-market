@@ -37,7 +37,7 @@ const AdCard = ({ ad }: { ad: Ad }) => {
 
             <div className="space-y-1 p-4">
                 <h3 className="line-clamp-1 text-lg font-semibold">
-                    {ad.model} {ad.brand} {ad.year}
+                    {ad.brand} {ad.model} {ad.year}
                 </h3>
                 <p className="text-sm text-gray-500">
                     {new Intl.DateTimeFormat('en-US', {
