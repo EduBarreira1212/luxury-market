@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,6 +30,7 @@ import { Input } from '@/app/_components/ui/input';
 import { Textarea } from '@/app/_components/ui/textarea';
 import { Separator } from '@/app/_components/ui/separator';
 import { CarFormValues, carSchema } from '@/app/_schemas/car';
+import { Uploader } from '@/app/_components/Uploader';
 
 const fuelOptions = [
     { value: 'GASOLINE', label: 'Gasoline' },
@@ -54,6 +55,8 @@ const CreateCarAdForm = () => {
     const router = useRouter();
     const { data: session } = useSession();
 
+    const [files, setFiles] = useState<File[]>([]);
+
     const form = useForm<CarFormValues>({
         resolver: zodResolver(carSchema),
         mode: 'onChange',
@@ -73,7 +76,6 @@ const CreateCarAdForm = () => {
     });
 
     const about = form.watch('about');
-
     const sellerIdFromSession = session?.user?.id;
 
     useEffect(() => {
@@ -90,17 +92,73 @@ const CreateCarAdForm = () => {
     const onSubmit = async (values: CarFormValues) => {
         try {
             const car = await createCar(values);
-            if (car) {
-                toast.success('Car ad created successfully');
-                form.reset();
-                router.push('/my-ads');
-                router.refresh();
+
+            if (!car) {
+                throw new Error('Car not returned from createCar');
             }
+
+            if (files.length > 0) {
+                for (const file of files) {
+                    const presignRes = await fetch('/api/uploads/presign', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            vehicleType: 'car',
+                            vehicleId: car.id,
+                            originalName: file.name,
+                            contentType: file.type,
+                            bytes: file.size,
+                        }),
+                    });
+
+                    if (!presignRes.ok) {
+                        const data = await presignRes.json().catch(() => ({}));
+                        throw new Error(
+                            data.error || 'Error to generate upload URL (presign).',
+                        );
+                    }
+
+                    const { url, key } = await presignRes.json();
+
+                    const uploadRes = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': file.type,
+                        },
+                        body: file,
+                    });
+
+                    if (!uploadRes.ok) {
+                        throw new Error('Falha ao enviar arquivo para o S3.');
+                    }
+
+                    const saveRes = await fetch(`/api/cars/${car.id}/photos`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key }),
+                    });
+
+                    if (!saveRes.ok) {
+                        const data = await saveRes.json().catch(() => ({}));
+                        throw new Error(
+                            data.error || 'Error to save car photo (DB).',
+                        );
+                    }
+                }
+            }
+
+            toast.success('Car ad created successfully');
+            form.reset();
+            setFiles([]);
+            router.push('/my-ads');
+            router.refresh();
         } catch (error) {
             console.error('Error when creating car ad', error);
             toast.error('Error when creating car ad');
         }
     };
+
+    const isSubmitting = form.formState.isSubmitting;
 
     return (
         <Card>
@@ -389,6 +447,11 @@ const CreateCarAdForm = () => {
                                     </FormItem>
                                 )}
                             />
+                            <Uploader
+                                files={files}
+                                onFilesChange={setFiles}
+                                disabled={isSubmitting}
+                            />
                         </CardContent>
 
                         <CardFooter className="flex flex-col gap-2 border-t pt-4 sm:flex-row sm:items-center sm:justify-end">
@@ -400,19 +463,19 @@ const CreateCarAdForm = () => {
                                 <Button
                                     type="button"
                                     variant="outline"
-                                    onClick={() => form.reset()}
-                                    disabled={form.formState.isSubmitting}
+                                    onClick={() => {
+                                        form.reset();
+                                        setFiles([]);
+                                    }}
+                                    disabled={isSubmitting}
                                 >
                                     Clear
                                 </Button>
                                 <Button
                                     type="submit"
-                                    disabled={
-                                        form.formState.isSubmitting ||
-                                        !sellerIdFromSession
-                                    }
+                                    disabled={isSubmitting || !sellerIdFromSession}
                                 >
-                                    {form.formState.isSubmitting && (
+                                    {isSubmitting && (
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                     )}
                                     Publish car
