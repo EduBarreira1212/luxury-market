@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { MotorcycleFormValues, motorcycleSchema } from '@/app/_schemas/motorcycle';
@@ -23,11 +24,14 @@ import {
 import { Input } from '@/app/_components/ui/input';
 import { Separator } from '@/app/_components/ui/separator';
 import { Textarea } from '@/app/_components/ui/textarea';
+import { Uploader } from '@/app/_components/Uploader';
 
 const conditionOptions = [
     { value: 'NEW', label: 'New' },
     { value: 'USED', label: 'Used' },
 ] as const;
+
+const CDN = process.env.NEXT_PUBLIC_CLOUDFRONT_URL!;
 
 type EditableMotorcycle = {
     id: string;
@@ -40,6 +44,7 @@ type EditableMotorcycle = {
     price: number;
     cc: number;
     about: string;
+    s3Keys: string[];
 };
 
 type EditMotorcycleAdFormProps = {
@@ -48,6 +53,12 @@ type EditMotorcycleAdFormProps = {
 
 const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
     const router = useRouter();
+
+    const [existingPhotos, setExistingPhotos] = useState<string[]>(
+        motorcycle.s3Keys ?? [],
+    );
+    const [photosToDelete, setPhotosToDelete] = useState<string[]>([]);
+    const [newFiles, setNewFiles] = useState<File[]>([]);
 
     const form = useForm<MotorcycleFormValues>({
         resolver: zodResolver(motorcycleSchema),
@@ -67,6 +78,7 @@ const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
     });
 
     const about = form.watch('about');
+    const isSubmitting = form.formState.isSubmitting;
 
     const resetToOriginalValues = () => {
         form.reset({
@@ -80,16 +92,103 @@ const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
             cc: motorcycle.cc,
             about: motorcycle.about,
         });
+        setExistingPhotos(motorcycle.s3Keys ?? []);
+        setPhotosToDelete([]);
+        setNewFiles([]);
     };
+
+    function togglePhotoToDelete(key: string) {
+        setPhotosToDelete((prev) =>
+            prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key],
+        );
+    }
 
     const onSubmit = async (values: MotorcycleFormValues) => {
         try {
             const updatedMotorcycle = await updateMotorcycle(motorcycle.id, values);
-            if (updatedMotorcycle) {
-                toast.success('Motorcycle ad updated successfully');
-                router.push(`/motorcycles/${motorcycle.id}`);
-                router.refresh();
+            if (!updatedMotorcycle) {
+                throw new Error('Failed to update motorcycle');
             }
+
+            // Delete selected photos
+            for (const key of photosToDelete) {
+                const res = await fetch(
+                    `/api/motorcycles/${motorcycle.id}/photos/delete`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key }),
+                    },
+                );
+
+                if (!res.ok) {
+                    const data = await res.json().catch(() => ({}));
+                    console.error(
+                        '[EditMotorcycleAdForm] delete photo error:',
+                        data,
+                    );
+                } else {
+                    setExistingPhotos((prev) => prev.filter((k) => k !== key));
+                }
+            }
+
+            // Upload new photos
+            for (const file of newFiles) {
+                const presignRes = await fetch('/api/uploads/presign', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        vehicleType: 'motorcycle',
+                        vehicleId: motorcycle.id,
+                        originalName: file.name,
+                        contentType: file.type,
+                        bytes: file.size,
+                    }),
+                });
+
+                if (!presignRes.ok) {
+                    const data = await presignRes.json().catch(() => ({}));
+                    throw new Error(
+                        data.error || 'Failed to generate upload URL (presign).',
+                    );
+                }
+
+                const { url, key } = await presignRes.json();
+
+                const uploadRes = await fetch(url, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': file.type },
+                    body: file,
+                });
+
+                if (!uploadRes.ok) {
+                    throw new Error('Failed to upload file to S3.');
+                }
+
+                const saveRes = await fetch(
+                    `/api/motorcycles/${motorcycle.id}/photos`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ key }),
+                    },
+                );
+
+                if (!saveRes.ok) {
+                    const data = await saveRes.json().catch(() => ({}));
+                    throw new Error(
+                        data.error || 'Failed to save motorcycle photo (DB).',
+                    );
+                }
+
+                setExistingPhotos((prev) => [...prev, key]);
+            }
+
+            toast.success('Motorcycle ad updated successfully');
+            setPhotosToDelete([]);
+            setNewFiles([]);
+            router.push(`/motorcycles/${motorcycle.id}`);
+            router.refresh();
         } catch (error) {
             console.error('Error when updating motorcycle ad', error);
             toast.error('Error when updating motorcycle ad');
@@ -309,6 +408,60 @@ const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
                                 </FormItem>
                             )}
                         />
+
+                        {/* Existing photos */}
+                        <div className="space-y-2">
+                            <p className="text-sm font-semibold text-muted-foreground">
+                                Current photos
+                            </p>
+                            {existingPhotos.length === 0 ? (
+                                <p className="text-xs text-muted-foreground">
+                                    This motorcycle has no photos yet.
+                                </p>
+                            ) : (
+                                <div className="grid grid-cols-3 gap-2 md:grid-cols-4">
+                                    {existingPhotos.map((key) => {
+                                        const marked = photosToDelete.includes(key);
+                                        return (
+                                            <button
+                                                key={key}
+                                                type="button"
+                                                onClick={() =>
+                                                    togglePhotoToDelete(key)
+                                                }
+                                                className={`relative h-20 overflow-hidden rounded-md border text-xs transition ${
+                                                    marked
+                                                        ? 'border-destructive ring-2 ring-destructive/60'
+                                                        : 'border-border hover:border-primary/60'
+                                                }`}
+                                            >
+                                                <div className="relative h-full w-full">
+                                                    <Image
+                                                        src={`${CDN}/${key}`}
+                                                        alt="Motorcycle photo"
+                                                        fill
+                                                        className="object-cover"
+                                                    />
+                                                </div>
+                                                <span className="absolute right-1 top-1 z-10 rounded-full bg-black/60 p-1 text-[10px] text-white">
+                                                    <X className="h-3 w-3" />
+                                                </span>
+                                                <span className="absolute bottom-1 left-1 z-10 rounded bg-black/60 px-1 py-0.5 text-[10px] text-white">
+                                                    {marked ? 'To delete' : 'Keep'}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* New photos uploader */}
+                        <Uploader
+                            files={newFiles}
+                            onFilesChange={setNewFiles}
+                            disabled={isSubmitting}
+                        />
                     </CardContent>
                     <CardFooter className="flex flex-col gap-2 border-t pt-4 sm:flex-row sm:items-center sm:justify-end">
                         <p className="text-sm text-muted-foreground">
@@ -319,15 +472,12 @@ const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
                                 type="button"
                                 variant="outline"
                                 onClick={resetToOriginalValues}
-                                disabled={form.formState.isSubmitting}
+                                disabled={isSubmitting}
                             >
                                 Reset
                             </Button>
-                            <Button
-                                type="submit"
-                                disabled={form.formState.isSubmitting}
-                            >
-                                {form.formState.isSubmitting && (
+                            <Button type="submit" disabled={isSubmitting}>
+                                {isSubmitting && (
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 )}
                                 Save changes
