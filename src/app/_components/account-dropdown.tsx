@@ -41,7 +41,9 @@ const AccountDropdown = ({ textColor, username }: AccountDropdownProps) => {
                         variant="ghost"
                         className="flex w-full items-center"
                         onClick={() => {
-                            signOut();
+                            signOut({
+                                redirectTo: '/',
+                            });
                         }}
                     >
                         Sign out
