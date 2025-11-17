@@ -126,7 +126,6 @@ const EditCarAdForm = ({ car }: EditCarAdFormProps) => {
                 throw new Error('Failed to update car');
             }
 
-            // Delete selected photos
             for (const key of photosToDelete) {
                 const res = await fetch(`/api/cars/${car.id}/photos/delete`, {
                     method: 'POST',
@@ -142,7 +141,6 @@ const EditCarAdForm = ({ car }: EditCarAdFormProps) => {
                 }
             }
 
-            // Upload new photos
             for (const file of newFiles) {
                 const presignRes = await fetch('/api/uploads/presign', {
                     method: 'POST',
@@ -485,7 +483,6 @@ const EditCarAdForm = ({ car }: EditCarAdFormProps) => {
                                 )}
                             />
 
-                            {/* Existing photos */}
                             <div className="space-y-2">
                                 <p className="text-sm font-semibold text-muted-foreground">
                                     Current photos
@@ -535,7 +532,6 @@ const EditCarAdForm = ({ car }: EditCarAdFormProps) => {
                                 )}
                             </div>
 
-                            {/* New photos uploader */}
                             <Uploader
                                 files={newFiles}
                                 onFilesChange={setNewFiles}

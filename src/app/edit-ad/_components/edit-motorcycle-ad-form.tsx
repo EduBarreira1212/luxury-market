@@ -110,7 +110,6 @@ const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
                 throw new Error('Failed to update motorcycle');
             }
 
-            // Delete selected photos
             for (const key of photosToDelete) {
                 const res = await fetch(
                     `/api/motorcycles/${motorcycle.id}/photos/delete`,
@@ -132,7 +131,6 @@ const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
                 }
             }
 
-            // Upload new photos
             for (const file of newFiles) {
                 const presignRes = await fetch('/api/uploads/presign', {
                     method: 'POST',
@@ -409,7 +407,6 @@ const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
                             )}
                         />
 
-                        {/* Existing photos */}
                         <div className="space-y-2">
                             <p className="text-sm font-semibold text-muted-foreground">
                                 Current photos
@@ -456,7 +453,6 @@ const EditMotorcycleAdForm = ({ motorcycle }: EditMotorcycleAdFormProps) => {
                             )}
                         </div>
 
-                        {/* New photos uploader */}
                         <Uploader
                             files={newFiles}
                             onFilesChange={setNewFiles}
