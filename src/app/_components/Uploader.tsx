@@ -29,7 +29,7 @@ export const Uploader = ({ files, onFilesChange, disabled }: UploaderProps) => {
         <div className="space-y-2">
             <p className="text-sm font-semibold text-muted-foreground">Photos</p>
             <p className="text-xs text-muted-foreground">
-                Add up to 10 photos of the car. You can crop and reorder later.
+                Add up to 10 photos of the vehicle. You can crop and reorder later.
             </p>
 
             <input
