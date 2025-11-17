@@ -1,5 +1,8 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
@@ -27,9 +30,7 @@ import { Separator } from '@/app/_components/ui/separator';
 import { Textarea } from '@/app/_components/ui/textarea';
 import { MotorcycleFormValues, motorcycleSchema } from '@/app/_schemas/motorcycle';
 import { createMotorcycle } from '@/app/_actions/create-motorcycle';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { Uploader } from '@/app/_components/Uploader';
 
 const conditionOptions = [
     { value: 'NEW', label: 'New' },
@@ -39,6 +40,8 @@ const conditionOptions = [
 const CreateMotorcycleAdForm = () => {
     const router = useRouter();
     const { data: session } = useSession();
+
+    const [files, setFiles] = useState<File[]>([]);
 
     const form = useForm<MotorcycleFormValues>({
         resolver: zodResolver(motorcycleSchema),
@@ -58,8 +61,8 @@ const CreateMotorcycleAdForm = () => {
     });
 
     const about = form.watch('about');
-
     const sellerIdFromSession = session?.user?.id;
+    const isSubmitting = form.formState.isSubmitting;
 
     useEffect(() => {
         if (
@@ -75,12 +78,69 @@ const CreateMotorcycleAdForm = () => {
     const onSubmit = async (values: MotorcycleFormValues) => {
         try {
             const motorcycle = await createMotorcycle(values);
-            if (motorcycle) {
-                toast.success('Motorcycle ad created successfully');
-                form.reset();
-                router.push('/my-ads');
-                router.refresh();
+
+            if (!motorcycle) {
+                throw new Error('Motorcycle not returned from createMotorcycle');
             }
+
+            if (files.length > 0) {
+                for (const file of files) {
+                    const presignRes = await fetch('/api/uploads/presign', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            vehicleType: 'motorcycle',
+                            vehicleId: motorcycle.id,
+                            originalName: file.name,
+                            contentType: file.type,
+                            bytes: file.size,
+                        }),
+                    });
+
+                    if (!presignRes.ok) {
+                        const data = await presignRes.json().catch(() => ({}));
+                        throw new Error(
+                            data.error || 'Failed to generate upload URL (presign).',
+                        );
+                    }
+
+                    const { url, key } = await presignRes.json();
+
+                    const uploadRes = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': file.type,
+                        },
+                        body: file,
+                    });
+
+                    if (!uploadRes.ok) {
+                        throw new Error('Failed to upload file to S3.');
+                    }
+
+                    const saveRes = await fetch(
+                        `/api/motorcycles/${motorcycle.id}/photos`,
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ key }),
+                        },
+                    );
+
+                    if (!saveRes.ok) {
+                        const data = await saveRes.json().catch(() => ({}));
+                        throw new Error(
+                            data.error || 'Failed to save motorcycle photo (DB).',
+                        );
+                    }
+                }
+            }
+
+            toast.success('Motorcycle ad created successfully');
+            form.reset();
+            setFiles([]);
+            router.push('/my-ads');
+            router.refresh();
         } catch (error) {
             console.error('Error when creating motorcycle ad', error);
             toast.error('Error when creating motorcycle ad');
@@ -303,25 +363,34 @@ const CreateMotorcycleAdForm = () => {
                                 </FormItem>
                             )}
                         />
+                        <Uploader
+                            files={files}
+                            onFilesChange={setFiles}
+                            disabled={isSubmitting}
+                        />
                     </CardContent>
                     <CardFooter className="flex flex-col gap-2 border-t pt-4 sm:flex-row sm:items-center sm:justify-end">
                         <p className="text-sm text-muted-foreground">
-                            By publishing you agree to our Terms & Privacy Policy.
+                            By publishing you agree to our Terms &amp; Privacy
+                            Policy.
                         </p>
                         <div className="flex w-full justify-end gap-2 sm:w-auto">
                             <Button
                                 type="button"
                                 variant="outline"
-                                onClick={() => form.reset()}
-                                disabled={form.formState.isSubmitting}
+                                onClick={() => {
+                                    form.reset();
+                                    setFiles([]);
+                                }}
+                                disabled={isSubmitting}
                             >
                                 Clear
                             </Button>
                             <Button
                                 type="submit"
-                                disabled={form.formState.isSubmitting}
+                                disabled={isSubmitting || !sellerIdFromSession}
                             >
-                                {form.formState.isSubmitting && (
+                                {isSubmitting && (
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 )}
                                 Publish motorcycle
