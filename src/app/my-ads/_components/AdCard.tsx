@@ -5,7 +5,11 @@ import React from 'react';
 
 type Ad = Car | Motorcycle;
 
+const CDN = process.env.NEXT_PUBLIC_CLOUDFRONT_URL!;
+
 const AdCard = ({ ad }: { ad: Ad }) => {
+    const coverKey = ad.s3Keys[0];
+
     const getHref = (ad: Ad) => {
         if ('gearbox' in ad) {
             return `/cars/${ad.id}`;
@@ -20,9 +24,9 @@ const AdCard = ({ ad }: { ad: Ad }) => {
             className="block overflow-hidden rounded-2xl border bg-white shadow-sm transition hover:shadow-md"
         >
             <div className="aspect-video w-full bg-gray-100">
-                {ad.imageUrl ? (
+                {coverKey ? (
                     <Image
-                        src={ad.imageUrl}
+                        src={`${CDN}/${coverKey}`}
                         alt={ad.model}
                         width={800}
                         height={450}
