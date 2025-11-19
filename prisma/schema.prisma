@@ -49,6 +49,7 @@ model Car {
   fuel      FuelType
   gearbox   Gearbox
   about     String
+  s3Keys    String[]  @default([])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   seller    Seller    @relation(fields: [sellerId], references: [id], onDelete: Cascade)
@@ -65,6 +66,7 @@ model Motorcycle {
   price     Float
   cc        Int
   about     String
+  s3Keys    String[]  @default([])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   seller    Seller    @relation(fields: [sellerId], references: [id], onDelete: Cascade)
