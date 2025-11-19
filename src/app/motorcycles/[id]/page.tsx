@@ -4,11 +4,11 @@ import Header from '@/app/_components/header';
 import SellerInfo from '@/app/_components/seller-info';
 import SpecItem from '@/app/_components/spec-item';
 import { Button } from '@/app/_components/ui/button';
+import { VehicleCarousel } from '@/app/_components/vehicle-carousel';
 import { getMotorcycleById } from '@/app/_data-access/motorcycle/get-motorcycle-by-id';
 import { getSellerById } from '@/app/_data-access/seller/get-seller-by-id';
 import { formatCurrency } from '@/app/_helpers/currency';
 import { auth } from '@/app/_lib/auth';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 type Params = { id: string };
@@ -54,16 +54,11 @@ const MotorcycleDetailsPage = async ({ params: { id } }: { params: Params }) => 
 
                 <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                     <div className="lg:col-span-2">
-                        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-md">
-                            <Image
-                                src="/images/fallback.png"
-                                alt={`${title} photo`}
-                                fill
-                                priority
-                                className="object-cover transition-transform duration-300 ease-out hover:scale-[1.02]"
-                                sizes="(max-width: 1024px) 100vw, 66vw"
-                            />
-                        </div>
+                        <VehicleCarousel
+                            imageKeys={motorcycle.s3Keys}
+                            alt={`${motorcycle.brand} ${motorcycle.model}`}
+                            className="max-w-3xl"
+                        />
                     </div>
 
                     <aside className="lg:sticky lg:top-6">
