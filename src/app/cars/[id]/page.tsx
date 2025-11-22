@@ -14,7 +14,13 @@ import React from 'react';
 
 type Params = { id: string };
 
-const CarDetailsPage = async ({ params: { id } }: { params: Params }) => {
+type CarDetailsPageProps = {
+    params: Promise<Params>;
+};
+
+const CarDetailsPage = async ({ params }: CarDetailsPageProps) => {
+    const { id } = await params;
+
     const session = await auth();
 
     const car = await getCarById(id);
