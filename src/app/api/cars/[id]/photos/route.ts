@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 import { db } from '@/app/_lib/prisma';
 import { auth } from '@/app/_lib/auth';
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
-    const carId = params.id;
+export async function POST(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> },
+) {
+    const carId = (await params).id;
     const { key } = await req.json();
 
     if (!key) {
