@@ -10,16 +10,16 @@ const AboutPage = () => {
                 </h1>
                 <p className="text-lg leading-relaxed text-gray-700">
                     Welcome to <span className="font-semibold">Luxury Market</span>,
-                    the premier destination for buying and selling the world's most
-                    exclusive cars and motorcycles. Our platform is designed for
+                    the premier destination for buying and selling the world&apos;s
+                    most exclusive cars and motorcycles. Our platform is designed for
                     enthusiasts and collectors who demand excellence, offering a
                     curated selection of high-end vehicles from top brands.
                 </p>
                 <p className="mt-4 text-lg leading-relaxed text-gray-700">
                     At <span className="font-semibold">Luxury Market</span>, we
                     prioritize authenticity, transparency, and a seamless purchasing
-                    experience. Whether you're looking for the latest supercar or a
-                    rare classic motorcycle, our marketplace connects you with
+                    experience. Whether you&apos;re looking for the latest supercar
+                    or a rare classic motorcycle, our marketplace connects you with
                     verified sellers and trusted dealerships worldwide.
                 </p>
                 <p className="mt-4 text-lg leading-relaxed text-gray-700">
