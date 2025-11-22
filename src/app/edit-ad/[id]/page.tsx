@@ -8,10 +8,12 @@ import React from 'react';
 import EditPageShell from '../_components/EditPageShell';
 
 type EditAdPageProps = {
-    params: { id: string };
+    params: Promise<{ id: string }>;
 };
 
-const EditAdPage = async ({ params: { id } }: EditAdPageProps) => {
+const EditAdPage = async ({ params }: EditAdPageProps) => {
+    const { id } = await params;
+
     const session = await auth();
 
     if (!session?.user?.id) return notFound();

@@ -13,7 +13,13 @@ import { notFound } from 'next/navigation';
 
 type Params = { id: string };
 
-const MotorcycleDetailsPage = async ({ params: { id } }: { params: Params }) => {
+type MotorcycleDetailsPageProps = {
+    params: Promise<Params>;
+};
+
+const MotorcycleDetailsPage = async ({ params }: MotorcycleDetailsPageProps) => {
+    const { id } = await params;
+
     const session = await auth();
 
     const motorcycle = await getMotorcycleById(id);
@@ -33,6 +39,7 @@ const MotorcycleDetailsPage = async ({ params: { id } }: { params: Params }) => 
 
             <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:py-8">
                 <BackButton />
+
                 <section className="mb-4 flex flex-col items-start justify-between gap-3 sm:mb-6 sm:flex-row sm:items-center">
                     <h1 className="text-2xl font-semibold tracking-tight text-gray-900 sm:text-3xl">
                         {title}

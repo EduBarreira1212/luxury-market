@@ -6,8 +6,11 @@ import { auth } from '@/app/_lib/auth';
 
 export const runtime = 'nodejs';
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
-    const motorcycleId = params.id;
+export async function POST(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> },
+) {
+    const motorcycleId = (await params).id;
     const { key } = await req.json();
 
     if (!key) {
